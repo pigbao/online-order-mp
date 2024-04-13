@@ -27,7 +27,7 @@
 		</view>
 		<view class="list">
 			<scroll-view style="height: 100%;" scroll-y="true" class="scroll-view category">
-				<view id="demo1" class="category-item" v-for="item in 50">找新鲜果茶找新鲜果茶</view>
+				<view id="demo1" class="category-item" :class="item==1?'active':''" v-for="item in 50">找新鲜果茶</view>
 			</scroll-view>
 			<scroll-view style="height: 100%;" scroll-y="true" class="scroll-view goods">
 				<view id="demo1" v-for="category in list">
@@ -35,9 +35,9 @@
 						{{category.categoryName}}
 					</view>
 					<view class="goods-list">
-						<view class="goods-item" v-for="goods in category.goods">
+						<view class="goods-item" v-for="goods in category.goods" @click="handleDetail(goods)">
 							<view class="img">
-								<image style="width: 100%; height: 100%; background-color: #ccc;border-radius: 4rpx;"
+								<image style="width: 100%; height: 100%; background-color: #eee;border-radius: 4rpx;"
 									mode="aspectFit" :src="goods.img"></image>
 							</view>
 							<view class="goods-info">
@@ -80,8 +80,71 @@
 			goodsName: '奶茶',
 			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
 			minMoney: '19'
-		}]
-	}])
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, ]
+	}, {
+		categoryId: 1,
+		categoryName: '找新鲜果茶',
+		goods: [{
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, ]
+	}, {
+		categoryId: 1,
+		categoryName: '找新鲜果茶',
+		goods: [{
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, {
+			goodsId: 1,
+			goodsName: '奶茶',
+			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+			minMoney: '19'
+		}, ]
+	}, ])
 </script>
 
 <style scoped lang="scss">
@@ -160,15 +223,20 @@
 				width: 260rpx;
 
 				.category-item {
-					padding: 20rpx;
+					padding: 30rpx 20rpx;
 					font-size: 26rpx;
+				}
+
+				.active {
+					background: #fff;
+					color: #86B394;
 				}
 			}
 
 			.goods {
 				// flex: 1;
 				background-color: #fff;
-				border-radius: 16rpx 0 0 0;
+				// border-radius: 16rpx 0 0 0;
 				padding: 0 20rpx;
 
 				.category-name {

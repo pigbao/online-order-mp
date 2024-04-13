@@ -9,7 +9,8 @@
 			"path": "pages/goods/goods",
 			"style": {
 				"navigationStyle": "custom",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"disableScroll": true
 			}
 
 		}, {

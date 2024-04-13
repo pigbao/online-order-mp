@@ -1,14 +1,8 @@
 <template>
 	<view class="container">
 		<swiper class="swiper" circular :autoplay="true">
-			<swiper-item>
-				<view class="swiper-item uni-bg-red"></view>
-			</swiper-item>
-			<swiper-item>
-				<view class="swiper-item uni-bg-green"></view>
-			</swiper-item>
-			<swiper-item>
-				<view class="swiper-item uni-bg-blue"></view>
+			<swiper-item v-for="(item,index) in bannerList" :key="index">
+				<view class="swiper-item" :style="`background-image: url(${item.url});`"></view>
 			</swiper-item>
 		</swiper>
 
@@ -50,6 +44,10 @@
 <script setup>
 	const takeOutImg = ref('../../static/index/takeOut.png')
 	const deliveryImg = ref('../../static/index/delivery.png')
+
+	const bannerList = ref([{
+		url: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png'
+	}])
 </script>
 
 <style scoped lang="scss">
@@ -58,20 +56,12 @@
 		.swiper {
 			height: 800rpx;
 
+
 			.swiper-item {
 				height: 100%;
-			}
+				background-repeat: no-repeat;
+				background-size: 100%;
 
-			.uni-bg-red {
-				background-color: red;
-			}
-
-			.uni-bg-green {
-				background-color: green;
-			}
-
-			.uni-bg-blue {
-				background-color: blue;
 			}
 		}
 

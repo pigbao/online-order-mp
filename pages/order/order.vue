@@ -1,6 +1,9 @@
 <template>
 	<view class="container">
-		订单
+		<StatusBar></StatusBar>
+		<view class="">
+			123
+		</view>
 	</view>
 </template>
 

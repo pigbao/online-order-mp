@@ -16,5 +16,14 @@
 	/*每个页面公共css */
 	page {
 		background-color: #f1f5f9;
+		color: #3f3f46;
+	}
+
+	::-webkit-scrollbar {
+		display: none;
+		width: 0 !important;
+		height: 0 !important;
+		-webkit-appearance: none;
+		background: transparent;
 	}
 </style>

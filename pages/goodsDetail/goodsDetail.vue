@@ -201,22 +201,7 @@
 			}
 		}
 
-		// <view class="add-box">
-		// 	<view class="head">
-		// 		<view class="money">
-		// 			￥16
-		// 		</view>
-		// 		<view class="count">
-		// 			1
-		// 		</view>
-		// 	</view>
-		// 	<view class="specs-text">
-		// 		123
-		// 	</view>
-		// 	<view class="btn">
-		// 		<button>加入购物车</button>
-		// 	</view>
-		// </view>
+
 
 		.add-box {
 			position: fixed;

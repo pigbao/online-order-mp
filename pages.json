@@ -27,6 +27,13 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/goodsDetail/goodsDetail",
+			"style": {
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	"globalStyle": {

@@ -26,4 +26,8 @@
 		-webkit-appearance: none;
 		background: transparent;
 	}
+
+	button::after {
+		border: initial;
+	}
 </style>

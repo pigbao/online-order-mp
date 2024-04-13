@@ -145,6 +145,14 @@
 			minMoney: '19'
 		}, ]
 	}, ])
+
+	function handleDetail(goods) {
+		console.log("goods: " + JSON.stringify(goods));
+		uni.navigateTo({
+			url: "/pages/goodsDetail/goodsDetail"
+		})
+
+	}
 </script>
 
 <style scoped lang="scss">

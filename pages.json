@@ -3,8 +3,29 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationStyle": "custom"
 			}
+		}, {
+			"path": "pages/goods/goods",
+			"style": {
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/order/order",
+			"style": {
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/user",
+			"style": {
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	"globalStyle": {
@@ -20,15 +41,26 @@
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{
-			"pagePath": "pages/component/index",
-			"iconPath": "static/image/icon_component.png",
-			"selectedIconPath": "static/image/icon_component_HL.png",
-			"text": "组件"
+			"pagePath": "pages/index/index",
+			"iconPath": "static/tabbar/index.png",
+			"selectedIconPath": "static/tabbar/index-select.png",
+			"text": "首页"
+
 		}, {
-			"pagePath": "pages/API/index",
-			"iconPath": "static/image/icon_API.png",
-			"selectedIconPath": "static/image/icon_API_HL.png",
-			"text": "接口"
+			"pagePath": "pages/goods/goods",
+			"iconPath": "static/tabbar/goods.png",
+			"selectedIconPath": "static/tabbar/goods-select.png",
+			"text": "点单"
+		}, {
+			"pagePath": "pages/order/order",
+			"iconPath": "static/tabbar/order.png",
+			"selectedIconPath": "static/tabbar/order-select.png",
+			"text": "订单"
+		}, {
+			"pagePath": "pages/user/user",
+			"iconPath": "static/tabbar/user.png",
+			"selectedIconPath": "static/tabbar/user-select.png",
+			"text": "我的"
 		}]
 	}
 }

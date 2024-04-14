@@ -13,7 +13,7 @@
 					外送
 				</view>
 			</view>
-			<view class="search">
+			<view class="search" @click="handleSearch">
 				<uni-icons type="search" size="26"></uni-icons>
 			</view>
 		</view>
@@ -148,11 +148,16 @@
 	}, ])
 
 	function handleDetail(goods) {
-		console.log("goods: " + JSON.stringify(goods));
 		uni.navigateTo({
 			url: "/pages/goodsDetail/goodsDetail"
 		})
 
+	}
+
+	function handleSearch() {
+		uni.navigateTo({
+			url: "/pages/search/search"
+		})
 	}
 </script>
 
@@ -297,8 +302,6 @@
 								.money {
 									font-weight: 600;
 								}
-
-								.add {}
 							}
 						}
 					}

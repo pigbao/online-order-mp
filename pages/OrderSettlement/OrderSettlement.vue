@@ -81,8 +81,9 @@
 					￥64
 				</view>
 			</view>
-			<button class="button" @click="handleSubmit">去结算</button>
+			<button class="button" @click="handlePay">立即支付</button>
 		</view>
+		<MockPay ref="MockPayRef"></MockPay>
 	</view>
 </template>
 
@@ -129,6 +130,12 @@
 		"stock": 200,
 		"spData": "[{\"title\":\"规格\",\"value\":\"中杯\"},{\"title\":\"甜度\",\"value\":\"全糖\"}]"
 	}])
+
+	const MockPayRef = ref()
+
+	function handlePay() {
+		MockPayRef.value.open()
+	}
 </script>
 
 <style scoped lang="scss">

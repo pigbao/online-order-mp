@@ -32,7 +32,7 @@
 					￥16
 				</view>
 				<view class="count">
-					1
+					<Count v-model:value="goods.count"></Count>
 				</view>
 			</view>
 			<view class="specs-text">

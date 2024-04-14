@@ -35,7 +35,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/OrderSettlement/OrderSettlement",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "订单结算",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -45,7 +54,7 @@
 	"uniIdRouter": {},
 	"tabBar": {
 		"color": "#7A7E83",
-		"selectedColor": "#3cc51f",
+		"selectedColor": "#86B394",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{

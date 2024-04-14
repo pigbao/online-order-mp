@@ -61,6 +61,7 @@
 				</view>
 			</scroll-view>
 		</view>
+		<Cart></Cart>
 	</view>
 </template>
 

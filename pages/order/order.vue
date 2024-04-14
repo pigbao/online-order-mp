@@ -13,7 +13,7 @@
 						已完成
 					</view>
 				</view>
-				<view class="order-info">
+				<view class="order-info" @click="handleDetail">
 					<scroll-view class="goods" :scroll-x="true">
 						<image class="img" mode="aspectFill" v-for="item in 6"
 							src="http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png"></image>
@@ -36,6 +36,11 @@
 </template>
 
 <script setup>
+	function handleDetail() {
+		uni.navigateTo({
+			url: "/pages/orderDetail/orderDetail"
+		})
+	}
 </script>
 
 <style scoped lang="scss">

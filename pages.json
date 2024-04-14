@@ -34,26 +34,22 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/OrderSettlement/OrderSettlement",
+			"style": {
+				"navigationBarTitleText": "订单结算",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/orderDetail/orderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/OrderSettlement/OrderSettlement",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "订单结算",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/orderDetail/orderDetail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

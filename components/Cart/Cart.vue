@@ -22,7 +22,7 @@
 					</view>
 				</view>
 				<view class="goods">
-					<view class="goods-item" v-for="item in goods">
+					<view class="goods-item" v-for="(item,index) in goods" :key="index">
 						<view class="img">
 							<image style="width: 100%; height: 100%; background-color: #eee;border-radius: 4rpx;"
 								mode="aspectFill" :src="item.img"></image>

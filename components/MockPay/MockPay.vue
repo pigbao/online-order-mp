@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-	const money = ref(0)
+	const money = ref(64)
 	const popup = ref(null)
 
 	function open() {

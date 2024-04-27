@@ -6,7 +6,7 @@
 		<view class="goods">
 			<view class="item" v-for="item in goods" @click="handleSelect(item)">
 				<image style="width: 100rpx; height: 100rpx; background-color: #eee;border-radius: 4rpx;"
-					mode="aspectFit" :src="item.img"></image>
+					mode="aspectFill" :src="item.img"></image>
 				<view class="name">
 					{{item.goodsName}}
 				</view>
@@ -25,23 +25,27 @@
 
 	const goods = ref([{
 		goodsId: 1,
-		goodsName: '奶茶',
+		goodsName: '奶茶1',
 		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
 		minMoney: '19'
 	}, {
 		goodsId: 1,
-		goodsName: '奶茶',
+		goodsName: '珍珠奶茶',
 		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
 		minMoney: '19'
 	}, {
 		goodsId: 1,
-		goodsName: '奶茶',
+		goodsName: '奶茶2',
 		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
 		minMoney: '19'
 	}, {
 		goodsId: 1,
-		goodsName: '奶茶',
+		goodsName: '奶茶5',
 		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
+		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
 		minMoney: '19'
 	}, ])
 

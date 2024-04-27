@@ -1,7 +1,13 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			uni.login({
+				provider: 'weixin', //使用微信登录
+				success: function(loginRes) {
+					console.log(loginRes?.code);
+
+				}
+			});
 		},
 		onShow: function() {
 			console.log('App Show')

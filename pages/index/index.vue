@@ -14,7 +14,7 @@
 					</view>
 				</view>
 				<view class="card-body">
-					<view class="item">
+					<view class="item" @click="handleGo(1)">
 						<view class="img">
 							<image style="width: 100%; height: 100%; background-color: #fff;" mode="aspectFit"
 								:src="takeOutImg"></image>
@@ -24,9 +24,8 @@
 						</view>
 					</view>
 					<view class="divider">
-
 					</view>
-					<view class="item">
+					<view class="item" @click="handleGo(2)">
 						<view class="img">
 							<image style="width: 100%; height: 100%; background-color: #fff;" mode="aspectFit"
 								:src="deliveryImg"></image>
@@ -48,6 +47,12 @@
 	const bannerList = ref([{
 		url: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png'
 	}])
+
+	function handleGo(isTakeout) {
+		uni.switchTab({
+			url: `/pages/goods/goods?isTakeout=${isTakeout}`
+		})
+	}
 </script>
 
 <style scoped lang="scss">

@@ -3,13 +3,13 @@
 		<StatusBar style="background-color: #fff;"></StatusBar>
 		<view class="actions">
 			<view class="is-takeout">
-				<view class="item" :class="isTakeOut=='1'?'active':''" @click="changeTakeOut('1')">
+				<view class="item" :class="isTakeOut == '1' ? 'active' : ''" @click="changeTakeOut('1')">
 					自取
 				</view>
 				<view class="divider">
 
 				</view>
-				<view class="item" :class="isTakeOut=='2'?'active':''" @click="changeTakeOut('2')">
+				<view class="item" :class="isTakeOut == '2' ? 'active' : ''" @click="changeTakeOut('2')">
 					外送
 				</view>
 			</view>
@@ -27,29 +27,33 @@
 		</view>
 		<view class="list">
 			<scroll-view style="height: 100%;" scroll-y="true" class="scroll-view category">
-				<view id="demo1" class="category-item" :class="item==1?'active':''" v-for="item in 50">找新鲜果茶</view>
+				<view id="demo1" class="category-item" :class="item.id == 1 ? 'active' : ''" v-for="item in list"
+					:key="item.id">
+					{{ item.categoryName }}
+				</view>
 			</scroll-view>
 			<scroll-view style="height: 100%;" scroll-y="true" class="scroll-view goods">
-				<view id="demo1" v-for="category in list">
+				<view id="demo1" v-for="category in list" :key="category.id">
 					<view class="category-name">
-						{{category.categoryName}}
+						{{ category.categoryName }}
 					</view>
 					<view class="goods-list">
-						<view class="goods-item" v-for="goods in category.goods" @click="handleDetail(goods)">
+						<view class="goods-item" v-for="goods in category.goods" :key="goods.goodsId"
+							@click="handleDetail(goods)">
 							<view class="img">
 								<image style="width: 100%; height: 100%; background-color: #eee;border-radius: 4rpx;"
-									mode="aspectFit" :src="goods.img"></image>
+									mode="aspectFill" :src="goods.img"></image>
 							</view>
 							<view class="goods-info">
 								<view class="goods-name">
-									{{goods.goodsName}}
+									{{ goods.goodsName }}
 								</view>
 								<view class="intro">
-									{{goods.intro}}
+									{{ goods.intro }}
 								</view>
 								<view class="footer">
 									<view class="money">
-										￥{{goods.minMoney}}
+										￥{{ goods.minMoney }}
 									</view>
 									<view class="add">
 										<uni-icons type="plus-filled" size="30" color="#86B394"></uni-icons>
@@ -66,6 +70,12 @@
 </template>
 
 <script setup>
+	import {
+		apiQueryCateGoods
+	} from '@/api/goods.js'
+	import {
+		onMounted
+	} from "vue";
 	const isTakeOut = ref('1')
 
 	function changeTakeOut(value) {
@@ -73,79 +83,22 @@
 		isTakeOut.value = value
 	}
 
-	const list = ref([{
-		categoryId: 1,
-		categoryName: '找新鲜果茶',
-		goods: [{
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, ]
-	}, {
-		categoryId: 1,
-		categoryName: '找新鲜果茶',
-		goods: [{
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, ]
-	}, {
-		categoryId: 1,
-		categoryName: '找新鲜果茶',
-		goods: [{
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, {
-			goodsId: 1,
-			goodsName: '奶茶',
-			intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-			minMoney: '19'
-		}, ]
-	}, ])
+	const isTakeout = ref(1)
+	const list = ref([])
+
+	async function getList() {
+		try {
+			const res = await apiQueryCateGoods(isTakeout.value)
+			list.value = res
+		} catch (e) {
+
+			//TODO handle the exception
+		}
+	}
+
+	onMounted(() => {
+		getList()
+	})
 
 	function handleDetail(goods) {
 		uni.navigateTo({
@@ -239,6 +192,9 @@
 				.category-item {
 					padding: 30rpx 20rpx;
 					font-size: 26rpx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 				}
 
 				.active {
@@ -257,6 +213,8 @@
 					font-size: 32rpx;
 					padding: 20rpx 0;
 					font-weight: 700;
+
+					// text-align: center;
 				}
 
 				.goods-list {

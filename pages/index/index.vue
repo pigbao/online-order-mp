@@ -42,16 +42,9 @@
 
 <script setup>
 import { apiBannerList } from '@/api/index.js'
-const takeOutImg = ref('../../static/index/takeOut.png')
-const deliveryImg = ref('../../static/index/delivery.png')
+
 
 const bannerList = ref([])
-
-function handleGo(isTakeout) {
-	uni.switchTab({
-		url: `/pages/goods/goods?isTakeout=${isTakeout}`
-	})
-}
 
 async function getBannerList() {
 	try {
@@ -66,12 +59,19 @@ getBannerList()
 
 
 function handleSwiper(item) {
-	console.log('item :>> ', item);
 	if (item?.goodsId) {
 		uni.navigateTo({
 			url: `/pages/goodsDetail/goodsDetail?goodsId=${item.goodsId}`
 		})
 	}
+}
+
+const takeOutImg = ref('../../static/index/takeOut.png')
+const deliveryImg = ref('../../static/index/delivery.png')
+function handleGo(isTakeout) {
+	uni.switchTab({
+		url: `/pages/goods/goods?isTakeout=${isTakeout}`
+	})
 }
 </script>
 

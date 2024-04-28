@@ -15,6 +15,7 @@ export default ({}) => {
         ],
         imports: ["vue", "uni-app"],
         dts: "typings/auto-imports.d.ts",
+        dirs: ['stores'],
       }),
     ],
   });

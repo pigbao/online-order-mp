@@ -1,7 +1,7 @@
 <script setup>
 import { apiLogin } from '@/api/login.js';
-import { useUserStore } from '@/stores/user.js';
 const userStore = useUserStore()
+const shopStore = useShopStore()
 onLaunch(() => {
 	uni.login({
 		provider: 'weixin', //使用微信登录
@@ -14,6 +14,7 @@ onLaunch(() => {
 			console.log(err);
 		}
 	});
+	shopStore.loadShop()
 })
 
 </script>

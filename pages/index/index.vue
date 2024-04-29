@@ -14,7 +14,7 @@
 					</view>
 				</view>
 				<view class="card-body">
-					<view class="item" @click="handleGo(1)">
+					<view class="item" @click="handleGo('1')">
 						<view class="img">
 							<image style="width: 100%; height: 100%; background-color: #fff;" mode="aspectFit" :src="takeOutImg">
 							</image>
@@ -25,7 +25,7 @@
 					</view>
 					<view class="divider">
 					</view>
-					<view class="item" @click="handleGo(2)">
+					<view class="item" @click="handleGo('2')">
 						<view class="img">
 							<image style="width: 100%; height: 100%; background-color: #fff;" mode="aspectFit" :src="deliveryImg">
 							</image>
@@ -65,12 +65,13 @@ function handleSwiper(item) {
 		})
 	}
 }
-
+const isTakeoutStore = useIsTakeoutStore()
 const takeOutImg = ref('../../static/index/takeOut.png')
 const deliveryImg = ref('../../static/index/delivery.png')
 function handleGo(isTakeout) {
+	isTakeoutStore.isTakeout = isTakeout
 	uni.switchTab({
-		url: `/pages/goods/goods?isTakeout=${isTakeout}`
+		url: `/pages/goods/goods`
 	})
 }
 </script>

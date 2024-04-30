@@ -146,7 +146,7 @@ function changeCategory(categoryId) {
 
 function handleDetail(goods) {
 	uni.navigateTo({
-		url: "/pages/goodsDetail/goodsDetail"
+		url: `/pages/goodsDetail/goodsDetail?id=${goods.goodsId}`
 	})
 
 }

@@ -19,7 +19,8 @@
 					{{ spec.title }}
 				</view>
 				<view class="specs-values">
-					<view class="value" :class="selectSpecs.includes(value) ? 'active' : ''" v-for="value in spec.data">
+					<view class="value" :class="selectSpecsValues.includes(value) ? 'active' : ''"
+						v-for="(value, specIndex) in spec.data" :key="specIndex" @click="handleSelectSpec(index, value)">
 						{{ value }}
 					</view>
 				</view>
@@ -29,14 +30,14 @@
 		<view class="add-box">
 			<view class="head">
 				<view class="money">
-					￥16
+					￥{{ ((selectSpecs?.price || 0) / 100) * count }}
 				</view>
 				<view class="count">
-					<Count v-model:value="goods.count"></Count>
+					<Count v-model:value="count" :maxCount="selectSpecs?.stock || 1"></Count>
 				</view>
 			</view>
 			<view class="specs-text">
-				123
+				{{ selectSpecsValues.join(',') }}
 			</view>
 			<view class="btn">
 				<button class="button" @click="addCart">加入购物车</button>
@@ -47,67 +48,27 @@
 
 <script setup>
 import { apiAddCart } from '@/api/cart.js'
+import { apiGoodsDetail } from '@/api/goods.js'
 function handleBack() {
 	uni.navigateBack()
 }
-const goods = ref({
-	img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-	intro: '使用时令鲜葡萄搭配云南夏黑葡萄汁，果肉粒粒可见，入口鲜甜。搭配清新甘冽的七笞茉莉茶底，激发出更多的清爽口感。加入Q弹爽滑的冻冻，解锁多重味蕾享受。杯型容量:冷饮中杯500m1，大杯650ml.',
-	"id": 2,
-	"goodsName": "珍珠奶茶",
-	"categoryId": 2,
-	"isShelves": 1,
-	"isDelete": 0,
-	"createUserName": "root",
-	"createUserId": 1,
-	"createTime": "2024-04-12T15:33:08.000Z",
-	"updateTime": null,
-	"updateUserName": null,
-	"updateUserId": null,
-	"specs": [{
-		"id": 22,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 1000,
-		"price": 500,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"大杯\"},{\"title\":\"甜度\",\"value\":\"半糖\"}]"
-	},
-	{
-		"id": 23,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 1000,
-		"price": 500,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"大杯\"},{\"title\":\"甜度\",\"value\":\"全糖\"}]"
-	},
-	{
-		"id": 24,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 800,
-		"price": 400,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"中杯\"},{\"title\":\"甜度\",\"value\":\"半糖\"}]"
-	},
-	{
-		"id": 25,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 800,
-		"price": 400,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"中杯\"},{\"title\":\"甜度\",\"value\":\"全糖\"}]"
-	}
-	]
-})
+const goods = ref({})
 const specs = ref([])
 
-const selectSpecs = ref(['大杯', '半糖'])
+const selectSpecsValues = ref([])
 
-function getDetail() {
-	loadSpecs(goods.value.specs)
+async function getDetail(id) {
+	try {
+		const res = await apiGoodsDetail(id)
+		goods.value = res
+		loadSpecs(goods.value.specs)
+		selectSpecsValues.value = specs.value.map(item => {
+			return item.data[0]
+		})
+
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 function loadSpecs(initSpecs) {
@@ -130,14 +91,29 @@ function loadSpecs(initSpecs) {
 		return acc
 	}, [])
 	specs.value = sp
-	console.log("specs.value: " + JSON.stringify(specs.value));
 }
-const specId = ref(26)
+const selectSpecs = computed(() => {
+	const spec = goods?.value?.specs?.find(item => {
+		const spData = JSON.parse(item.spData)
+		if (spData.every(item => selectSpecsValues.value.includes(item.value))) {
+			return item.id
+		}
+	})
+	return spec
+})
 const count = ref(1)
+
+function handleSelectSpec(index, value) {
+	selectSpecsValues.value[index] = value
+}
 
 async function addCart() {
 	try {
-		await apiAddCart({ specId: specId.value, count: count.value, goodsId: goods.value.id })
+		if (selectSpecs.value.stock < count.value) {
+			uni.showToast({ title: '库存不足', icon: 'none' })
+			return
+		}
+		await apiAddCart({ specId: selectSpecs.value.id, count: count.value, goodsId: goods.value.id })
 		uni.navigateBack(
 			{ delta: 1 }
 		)
@@ -145,8 +121,8 @@ async function addCart() {
 		console.error(e);
 	}
 }
-onLoad(() => {
-	getDetail()
+onLoad((options) => {
+	getDetail(options?.id)
 })
 </script>
 

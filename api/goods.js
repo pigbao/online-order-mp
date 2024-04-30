@@ -9,3 +9,13 @@ export function apiQueryCateGoods(isTakeout) {
 		}
 	})
 }
+
+export function apiGoodsDetail(id) {
+	return request({
+		url: '/wx/goods/detail',
+		method: 'get',
+		data: {
+			id
+		}
+	})
+}

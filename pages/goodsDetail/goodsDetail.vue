@@ -47,7 +47,6 @@
 </template>
 
 <script setup>
-import { apiAddCart } from '@/api/cart.js'
 import { apiGoodsDetail } from '@/api/goods.js'
 function handleBack() {
 	uni.navigateBack()
@@ -107,13 +106,15 @@ function handleSelectSpec(index, value) {
 	selectSpecsValues.value[index] = value
 }
 
+const cartStore = useCartStore()
+
 async function addCart() {
 	try {
 		if (selectSpecs.value.stock < count.value) {
 			uni.showToast({ title: '库存不足', icon: 'none' })
 			return
 		}
-		await apiAddCart({ specId: selectSpecs.value.id, count: count.value, goodsId: goods.value.id })
+		await cartStore.addCart({ specId: selectSpecs.value.id, count: count.value, goodsId: goods.value.id })
 		uni.navigateBack(
 			{ delta: 1 }
 		)

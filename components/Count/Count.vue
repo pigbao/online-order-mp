@@ -17,21 +17,28 @@ const props = defineProps({
 	maxCount: {
 		type: Number,
 		default: 1
+	},
+	minCount: {
+		type: Number,
+		default: 1
 	}
 })
-const emits = defineEmits(['update:value'])
+const emits = defineEmits(['update:value', 'change'])
 
 function sub() {
-	if (props.value == 1) {
+	if (props.value == props.minCount) {
 		return
 	}
 	const newVal = props.value - 1
 	emits('update:value', newVal)
+	emits('change', newVal)
+
 }
 
 function add() {
 	const newVal = props.value + 1 > props.maxCount ? props.maxCount : props.value + 1
 	emits('update:value', newVal)
+	emits('change', newVal)
 }
 </script>
 

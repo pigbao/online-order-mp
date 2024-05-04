@@ -76,7 +76,6 @@
 import {
 	apiQueryCateGoods
 } from '@/api/goods.js'
-import { apiDistance } from '@/api/shop.js'
 
 const shopStore = useShopStore()
 const isTakeoutStore = useIsTakeoutStore()
@@ -103,34 +102,11 @@ async function getList() {
 	}
 }
 const distance = ref(0)
-async function getDistance() {
-	try {
-		const location = await getLocation()
-		const res = await apiDistance(location)
-		// 转换为km 保留1位小数
-		distance.value = (res / 1000).toFixed(1)
-	} catch (error) {
-		console.error(error);
-	}
-}
 
-function getLocation() {
-	return new Promise((resolve, reject) => {
-		uni.getLocation({
-			type: 'wgs84',
-			success: function(res) {
-				resolve(`${res.latitude},${res.longitude}`)
-			},
-			fail: function(err) {
-				reject(err)
-			}
-		})
-	})
-}
 
-onLoad(() => {
+onLoad(async () => {
 	getList()
-	getDistance()
+	distance.value = await shopStore.getDistance()
 })
 
 watch(() => isTakeoutStore.isTakeout, () => {

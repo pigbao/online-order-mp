@@ -3,7 +3,7 @@
 		<uni-popup ref="popup" type="bottom" border-radius="16rpx 16rpx 16rpx 16rpx" :safe-area="false">
 			<view class="card">
 				<view class="head">
-					<view class="action">
+					<view class="action" @click="close()">
 						<uni-icons type="close" size="26"></uni-icons>
 					</view>
 				</view>
@@ -13,7 +13,7 @@
 						羊驼奶茶店
 					</view>
 					<view class="money">
-						￥{{money}}
+						￥{{ money / 100 }}
 					</view>
 				</view>
 				<view class="btn">
@@ -25,71 +25,81 @@
 </template>
 
 <script setup>
-	const money = ref(64)
-	const popup = ref(null)
+const orderId = ref()
+const money = ref(64)
+const popup = ref(null)
 
-	function open() {
-		nextTick(() => {
-			popup.value.open()
-		})
-	}
-
-	function handlePay() {
-		uni.redirectTo({
-			url: "/pages/orderDetail/orderDetail"
-		})
-	}
-
-	defineExpose({
-		open
+function open(id, payPrice) {
+	money.value = payPrice
+	orderId.value = id
+	nextTick(() => {
+		popup.value.open()
 	})
+}
+
+function close() {
+	popup.value.close()
+	uni.redirectTo({
+		url: `/pages/orderDetail/orderDetail?id=${orderId.value}`
+	})
+}
+
+function handlePay() {
+	uni.redirectTo({
+		url: `/pages/orderDetail/orderDetail?id=${orderId.value}`
+	})
+}
+
+defineExpose({
+	open
+})
 </script>
 
 <style scoped lang="scss">
-	.container {
-		.card {
-			background: #fff;
-			border-radius: 16rpx;
+.container {
+	.card {
+		background: #fff;
+		border-radius: 16rpx;
+		display: flex;
+		flex-direction: column;
+		padding-bottom: 150rpx;
+
+
+		.head {
+			display: flex;
+			justify-content: flex-end;
+			padding: 20rpx;
+		}
+
+		.info {
 			display: flex;
 			flex-direction: column;
-			padding-bottom: 150rpx;
+			align-items: center;
 
-
-			.head {
-				display: flex;
-				justify-content: flex-end;
-				padding: 20rpx;
+			.name {
+				font-weight: 500;
 			}
 
-			.info {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-
-				.name {
-					font-weight: 500;
-				}
-
-				.money {
-					font-size: 90rpx;
-					padding: 50rpx 0;
-					font-weight: 700;
-				}
-			}
-
-			.btn {
-				padding: 20rpx 100rpx;
-
-				.button {
-					background-color: #86B394;
-					color: #fff;
-					border-radius: 50rpx;
-					padding: 0 30rpx;
-					margin: 0;
-				}
+			.money {
+				font-size: 90rpx;
+				padding: 50rpx 0;
+				font-weight: 700;
 			}
 		}
 
+		.btn {
+			padding: 20rpx 100rpx;
 
+			.button {
+				background-color: #86B394;
+				color: #fff;
+				border-radius: 50rpx;
+				padding: 0 30rpx;
+				margin: 0;
+			}
+		}
 	}
+
+
+}
 </style>

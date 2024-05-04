@@ -17,7 +17,11 @@ function request({
 				'custom-header': 'hello' //自定义请求头信息
 			},
 			success: (res) => {
-				resolve(res?.data?.data)
+				if(res?.data.code==200){
+					resolve(res?.data?.data)
+				}else{
+					reject(res?.data?.msg)
+				}
 			},
 			fail: (err) => {
 				reject(err)

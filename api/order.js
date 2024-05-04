@@ -6,3 +6,11 @@ export function apiGetOrders() {
     method: "get",
   });
 }
+
+export function apiCreateOrder(data) {
+  return request({
+    url: "/wx/order/add",
+    method: "post",
+    data
+  });
+}

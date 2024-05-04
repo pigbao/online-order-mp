@@ -14,3 +14,13 @@ export function apiCreateOrder(data) {
     data
   });
 }
+
+export function apiOrderDetail(id){
+  return request({
+    url: "/wx/order/detail",
+    method: "get",
+    data: {
+      id
+    }
+  });
+}

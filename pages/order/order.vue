@@ -1,84 +1,78 @@
 <template>
 	<view class="container">
 		<view class="list">
-			<view class="item">
+			<view class="item" v-for="item in list" :key="item.id">
 				<view class="head">
-					<view class="type"> 自取 </view>
-					<view class="time"> 2034-04-11 15:54:29 </view>
-					<view class="status"> 待支付 </view>
+					<view class="type"> {{ isTakeoutDict[item.isTakeout] }} </view>
+					<view class="time"> {{ formatTime(item.createTime) }} </view>
+					<view class="status"> {{ orderStatusDict[item.orderStatus] }} </view>
 				</view>
-				<view class="order-info" @click="handleDetail">
+				<view class="order-info" @click="handleDetail(item)">
 					<scroll-view class="goods" :scroll-x="true">
-						<image class="img" mode="aspectFill" v-for="item in 6"
-							src="http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png"></image>
+						<image class="img" mode="aspectFill" v-for="goods in item.goods" :src="goods.goodsImg"></image>
 					</scroll-view>
 					<view class="info">
-						<view class="money"> ￥16 </view>
-						<view class="count"> 共2件 </view>
+						<view class="money"> ￥{{ item.payPrice / 100 }} </view>
+						<view class="count"> 共{{ totalCount(item.goods) }}件 </view>
 					</view>
 				</view>
-				<view class="footer">
-					<button class="button">去支付</button>
+				<view class="footer" v-if="item.orderStatus !== 6">
+					<button class="button" v-if="item.orderStatus === 1" @click="handlePay(item)">去支付</button>
 				</view>
 			</view>
 		</view>
+		<MockPay ref="MockPayRef"></MockPay>
 	</view>
 </template>
 
 <script setup>
 import { apiGetOrders } from '@/api/order.js';
-function handleDetail() {
+import dayjs from 'dayjs';
+function handleDetail({ id }) {
+	console.log('id :>> ', id);
 	uni.navigateTo({
-		url: '/pages/orderDetail/orderDetail',
+		url: `/pages/orderDetail/orderDetail?id=${id}`,
 	});
 }
 
-const list = ref([
-	{
-		id: 1,
-		orderNum: '1',
-		orderStauts: 1,
-		openId: '123',
-		isTakeout: 1,
-		remark: null,
-		code: 35317,
-		payPrice: 4,
-		address: null,
-		customerName: null,
-		customerPhone: null,
-		gender: 1,
-		isDelete: 0,
-		createUserName: null,
-		createUserId: null,
-		createTime: '2024-04-18T14:29:52.000Z',
-		updateTime: null,
-		updateUserName: null,
-		updateUserId: null,
-		goodsList: [
-			{
-				id: 1,
-				orderId: 1,
-				goodsId: 1,
-				goodsName: '红烧牛肉面',
-				goodsImg: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-			}
-		]
-
-
-	},
-]);
+const list = ref([]);
 async function getList() {
 	try {
-		const res = apiGetOrders();
+		const res = await apiGetOrders();
+		console.log('res :>> ', res);
 		list.value = res;
 	} catch (e) {
 		console.error(e);
+	} finally {
+		uni.stopPullDownRefresh();
 	}
 }
 
-onMounted(() => {
+const MockPayRef = ref()
+function handlePay({ id, payPrice }) {
+	MockPayRef.value.open(id, payPrice)
+}
+
+function formatTime(time) {
+	return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+}
+
+function totalCount(goods) {
+	return goods.reduce((total, item) => total + item.count, 0)
+}
+
+const { dictVL: isTakeoutDict } = useDict('isTakeout')
+const { dictVL: orderStatusDict } = useDict('orderStatus')
+
+onShow(() => {
 	getList();
-});
+})
+
+onPullDownRefresh(() => {
+	getList()
+})
+
+
 </script>
 
 <style scoped lang="scss">
@@ -92,6 +86,7 @@ onMounted(() => {
 			background-color: #fff;
 			border-radius: 16rpx;
 			padding: 20rpx;
+			margin-bottom: 20rpx;
 
 			.head {
 				display: flex;
@@ -99,6 +94,7 @@ onMounted(() => {
 				align-items: center;
 				font-size: 26rpx;
 				margin-bottom: 10rpx;
+				padding-top: 10rpx;
 
 				.type {
 					color: #fff;

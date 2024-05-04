@@ -1,13 +1,16 @@
 <template>
 	<view class="container">
-		<view class="code">
-			35167
+		<view class="code" v-if="[2, 3].includes(orderDetail.orderStatus)">
+			{{ code }}
 			<view class="tip">
 				取餐码
 			</view>
 		</view>
+		<view class="order-tip">
+			{{ orderStatusDict[orderDetail.orderStatus] }}
+		</view>
 		<view class="status-tip">
-			订单已完成，喜欢您再来
+			感谢您的支持，喜欢您再来
 		</view>
 
 		<view class="card">
@@ -17,33 +20,33 @@
 				</view>
 				<view class="goods-item" v-for="item in goods">
 					<view class="img">
-						<image style="width: 100%; height: 100%; background-color: #eee;border-radius: 4rpx;"
-							mode="aspectFill" :src="item.img"></image>
+						<image style="width: 100%; height: 100%; background-color: #eee;border-radius: 4rpx;" mode="aspectFill"
+							:src="item.goodsImg"></image>
 					</view>
 					<view class="info">
 						<view class="name">
-							{{item.goodsName}}
+							{{ item.goodsName }}
 						</view>
 						<view class="specs">
-							{{formartSpData(item.spData)}}
+							{{ formartSpData(item.goodsSpec) }}
 						</view>
 
 					</view>
 					<view class="right">
 						<view class="money">
-							￥16
+							￥{{ item.goodsPrice / 100 }}
 						</view>
 						<view class="count">
-							x1
+							x{{ item.count }}
 						</view>
 					</view>
 				</view>
 				<view class="goods-sum">
 					<view class="count">
-						共4件商品
+						共{{ totalCount }}件商品
 					</view>
 					<view class="money">
-						总计￥64
+						总计￥{{ orderDetail.payPrice / 100 }}
 					</view>
 				</view>
 			</view>
@@ -55,10 +58,18 @@
 					订单号
 				</view>
 				<view class="value">
-					123
+					{{ orderDetail.orderNum }}
 				</view>
-				<view class="copy">
+				<view class="copy" @click="handleCopy(orderDetail.orderNum)">
 					复制
+				</view>
+			</view>
+			<view class="item">
+				<view class="label">
+					下单时间
+				</view>
+				<view class="value">
+					{{ createTime }}
 				</view>
 			</view>
 			<view class="item">
@@ -66,7 +77,7 @@
 					备注
 				</view>
 				<view class="value">
-					备注备注备注
+					{{ orderDetail.remark }}
 				</view>
 			</view>
 		</view>
@@ -74,175 +85,195 @@
 </template>
 
 <script setup>
-	function formartSpData(spData) {
-		const dataObj = JSON.parse(spData)
-		const dataArr = dataObj.map(item => item.value)
-		return dataArr.toString()
+import { apiOrderDetail } from '@/api/order.js'
+import dayjs, { unix } from 'dayjs';
+const orderId = ref()
+function formartSpData(spData) {
+	const dataObj = JSON.parse(spData)
+	const dataArr = dataObj.map(item => item.value)
+	return dataArr.toString()
+}
+
+
+const code = computed(() => {
+	// 4位数字  前面补0
+	return orderDetail.value?.code?.toString().padStart(4, '0')
+})
+
+const totalCount = computed(() => {
+	return goods.value?.reduce((acc, cur) => acc + cur.count, 0)
+})
+
+const createTime = computed(() => {
+	return dayjs(orderDetail.value?.createTime).format('YYYY-MM-DD HH:mm:ss')
+})
+
+const orderDetail = ref({})
+const goods = ref([])
+
+async function getDetail() {
+	try {
+		const res = await apiOrderDetail(orderId.value)
+		console.log('res :>> ', res);
+		orderDetail.value = res
+		console.log('orderDetail.value :>> ', orderDetail.value);
+		goods.value = res.goods
+	} catch (error) {
+		console.log('error :>> ', error);
 	}
-	const goods = ref([{
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		"id": 22,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 1000,
-		"price": 500,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"大杯\"},{\"title\":\"甜度\",\"value\":\"半糖\"}]"
-	}, {
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		"id": 23,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 1000,
-		"price": 500,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"大杯\"},{\"title\":\"甜度\",\"value\":\"全糖\"}]"
-	}, {
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		"id": 24,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 800,
-		"price": 400,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"中杯\"},{\"title\":\"甜度\",\"value\":\"半糖\"}]"
-	}, {
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		"id": 25,
-		"goodsId": 2,
-		"goodsName": "珍珠奶茶",
-		"originalPrice": 800,
-		"price": 400,
-		"stock": 200,
-		"spData": "[{\"title\":\"规格\",\"value\":\"中杯\"},{\"title\":\"甜度\",\"value\":\"全糖\"}]"
-	}])
+}
+
+function handleCopy(text) {
+	uni.setClipboardData({
+		data: text,
+		success: function() {
+			uni.showToast({
+				title: '复制成功',
+				icon: 'none'
+			})
+		}
+	})
+}
+
+onLoad((options) => {
+	console.log('options :>> ', options);
+	orderId.value = options.id
+	getDetail()
+})
+
+const { dictVL: orderStatusDict } = useDict('orderStatus')
 </script>
 
 <style scoped lang="scss">
-	.container {
-		padding: 30rpx 20rpx 80rpx 20rpx;
+.container {
+	padding: 30rpx 20rpx 80rpx 20rpx;
 
-		.code {
-			font-size: 60rpx;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
+	.code {
+		font-size: 60rpx;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
 
-			.tip {
-				font-size: 20rpx;
-				padding: 6rpx 12rpx;
-				margin-left: 10rpx;
-				border-radius: 20rpx;
-				background-color: #86B394;
-				color: #fff;
-				font-weight: 300;
+		.tip {
+			font-size: 20rpx;
+			padding: 6rpx 12rpx;
+			margin-left: 10rpx;
+			border-radius: 20rpx;
+			background-color: #86B394;
+			color: #fff;
+			font-weight: 300;
+		}
+	}
+
+	.order-tip {
+		font-size: 38rpx;
+
+	}
+
+	.status-tip {
+		font-size: 26rpx;
+		padding-top: 10rpx;
+		padding-bottom: 40rpx;
+	}
+
+	.card {
+		background-color: #fff;
+		padding: 20rpx;
+		border-radius: 16rpx;
+		margin-bottom: 20rpx;
+
+		.goods {
+			.goods-name {
+				padding: 0 20rpx 20rpx 20rpx;
 			}
-		}
 
-		.status-tip {
-			font-size: 26rpx;
-			padding-top: 10rpx;
-			padding-bottom: 40rpx;
-		}
+			.goods-item {
+				display: flex;
+				padding: 20rpx;
 
-		.card {
-			background-color: #fff;
-			padding: 20rpx;
-			border-radius: 16rpx;
-			margin-bottom: 20rpx;
+				.img {
+					width: 100rpx;
+					height: 100rpx;
 
-			.goods {
-				.goods-name {
-					padding: 0 20rpx 20rpx 20rpx;
 				}
 
-				.goods-item {
+				.info {
+					flex: 1;
+					padding: 0 20rpx;
 					display: flex;
-					padding: 20rpx;
+					flex-direction: column;
+					justify-content: space-between;
 
-					.img {
-						width: 100rpx;
-						height: 100rpx;
-
+					.name {
+						font-weight: 500;
+						font-size: 28rpx;
 					}
 
-					.info {
-						flex: 1;
-						padding: 0 20rpx;
-						display: flex;
-						flex-direction: column;
-						justify-content: space-between;
-
-						.name {
-							font-weight: 500;
-							font-size: 28rpx;
-						}
-
-						.specs {
-							font-size: 22rpx;
-							color: #a1a1aa;
-							flex: 1;
-						}
-
-					}
-
-					.right {
-						display: flex;
-						flex-direction: column;
-						align-items: flex-end;
-
-						.money {
-							font-weight: 600;
-						}
-
-						.count {
-							font-size: 24rpx;
-						}
-					}
-				}
-
-				.goods-sum {
-					display: flex;
-					align-items: center;
-					justify-content: flex-end;
-					padding: 20rpx;
-
-					.count {
-						font-size: 24rpx;
-						margin-right: 10rpx;
+					.specs {
+						font-size: 22rpx;
 						color: #a1a1aa;
+						flex: 1;
 					}
+
+				}
+
+				.right {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-end;
 
 					.money {
 						font-weight: 600;
 					}
+
+					.count {
+						font-size: 24rpx;
+					}
 				}
 			}
 
-			.item {
+			.goods-sum {
 				display: flex;
-				justify-content: space-between;
 				align-items: center;
-				padding: 16rpx 0;
+				justify-content: flex-end;
+				padding: 20rpx;
 
-				.value {
-					flex: 1;
-					display: flex;
-					justify-content: flex-end;
-					padding: 0 10rpx;
-					font-size: 22rpx;
-
-
+				.count {
+					font-size: 24rpx;
+					margin-right: 10rpx;
+					color: #a1a1aa;
 				}
 
-				.copy {
-					font-size: 20rpx;
-					border: 1rpx solid #a1a1aa;
-					border-radius: 16rpx;
-					color: #a1a1aa;
-					padding: 2rpx 10rpx;
+				.money {
+					font-weight: 600;
 				}
 			}
 		}
+
+		.item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 16rpx 0;
+
+			.value {
+				flex: 1;
+				display: flex;
+				justify-content: flex-end;
+				padding: 0 10rpx;
+				font-size: 22rpx;
+
+
+			}
+
+			.copy {
+				font-size: 20rpx;
+				border: 1rpx solid #a1a1aa;
+				border-radius: 16rpx;
+				color: #a1a1aa;
+				padding: 2rpx 10rpx;
+			}
+		}
 	}
+}
 </style>

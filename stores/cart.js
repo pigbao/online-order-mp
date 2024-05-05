@@ -7,11 +7,13 @@ import {
   apiClearCart,
 } from '@/api/cart.js';
 
+const isTakeoutStore = useIsTakeoutStore();
+
 export const useCartStore = defineStore('cart', () => {
   const cartList = ref([]);
   async function addCart(data) {
     try {
-      await apiAddCart(data);
+      await apiAddCart({...data,isTakeout:isTakeoutStore.isTakeout});
       getList();
     } catch (error) {
       console.error(error);
@@ -40,7 +42,7 @@ export const useCartStore = defineStore('cart', () => {
 
   async function clearCart() {
     try {
-      await apiClearCart();
+      await apiClearCart(isTakeoutStore.isTakeout);
       cartList.value = [];
     } catch (error) {
       console.error(error);
@@ -49,7 +51,7 @@ export const useCartStore = defineStore('cart', () => {
 
   async function getList() {
     try {
-      cartList.value = await apiGetCartList();
+      cartList.value = await apiGetCartList(isTakeoutStore.isTakeout);
     } catch (error) {
       console.error(error);
     }
@@ -66,6 +68,10 @@ export const useCartStore = defineStore('cart', () => {
       return total + item.count * item.price;
     }, 0);
     return res / 100;
+  });
+
+  watch(() => isTakeoutStore.isTakeout, () => {
+    getList();
   });
 
   return {

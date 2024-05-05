@@ -16,10 +16,13 @@ export function apiUpdateCart(data) {
 	})
 }
 
-export function apiGetCartList() {
+export function apiGetCartList(isTakeout) {
 	return request({
 		url: '/wx/cart/query',
 		method: 'get',
+		data: {
+			isTakeout
+		}
 	})
 }
 
@@ -33,9 +36,12 @@ export function apiDelCart(id){
 	})
 }
 
-export function apiClearCart(){
+export function apiClearCart(isTakeout){
 	return request({
 		url: '/wx/cart/clear',
 		method: 'post',
+		data: {
+			isTakeout
+		}
 	})
 }

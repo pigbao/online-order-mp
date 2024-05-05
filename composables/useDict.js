@@ -30,7 +30,7 @@ export const dicts = {
   ],
   orderStatus:[
     { label: '待支付', value: '1' },
-    { label: '配餐中', value: '2' },
+    { label: '备餐中', value: '2' },
     { label: '待取餐', value: '3' },
     { label: '已完成', value: '4' },
     { label: '待配送', value: '5' },

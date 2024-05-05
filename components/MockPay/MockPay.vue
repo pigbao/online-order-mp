@@ -25,6 +25,9 @@
 </template>
 
 <script setup>
+import { apiPay } from '@/api/order.js'
+const emits = defineEmits(['cancel', 'confirm'])
+
 const orderId = ref()
 const money = ref(64)
 const popup = ref(null)
@@ -39,15 +42,19 @@ function open(id, payPrice) {
 
 function close() {
 	popup.value.close()
-	uni.redirectTo({
-		url: `/pages/orderDetail/orderDetail?id=${orderId.value}`
-	})
+	emits('cancel', orderId.value)
 }
 
-function handlePay() {
-	uni.redirectTo({
-		url: `/pages/orderDetail/orderDetail?id=${orderId.value}`
-	})
+async function handlePay() {
+	try {
+		await apiPay(orderId.value)
+		popup.value.close()
+		emits('confirm', orderId.value)
+	} catch (error) {
+		console.error(error);
+		emits('cancel', orderId.value)
+	}
+
 }
 
 defineExpose({

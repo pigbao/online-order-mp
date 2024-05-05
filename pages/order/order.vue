@@ -16,12 +16,12 @@
 						<view class="count"> 共{{ totalCount(item.goods) }}件 </view>
 					</view>
 				</view>
-				<view class="footer" v-if="item.orderStatus !== 6">
+				<view class="footer" v-if="item.orderStatus == 1">
 					<button class="button" v-if="item.orderStatus === 1" @click="handlePay(item)">去支付</button>
 				</view>
 			</view>
 		</view>
-		<MockPay ref="MockPayRef"></MockPay>
+		<MockPay ref="MockPayRef" @confirm="confirmPay"></MockPay>
 	</view>
 </template>
 
@@ -51,6 +51,10 @@ async function getList() {
 const MockPayRef = ref()
 function handlePay({ id, payPrice }) {
 	MockPayRef.value.open(id, payPrice)
+}
+
+function confirmPay(orderId) {
+	uni.navigateTo({ url: `/pages/orderDetail/orderDetail?id=${orderId}` })
 }
 
 function formatTime(time) {

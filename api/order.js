@@ -24,3 +24,23 @@ export function apiOrderDetail(id){
     }
   });
 }
+
+export function apiCancelOrder(id){
+  return request({
+    url: "/wx/order/cancel",
+    method: "post",
+    data: {
+      id
+    }
+  });
+}
+
+export function apiPay(id){
+  return request({
+    url: "/wx/order/pay",
+    method: "post",
+    data: {
+      id
+    }
+  });
+}

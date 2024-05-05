@@ -10,7 +10,7 @@
 			{{ orderStatusDict[orderDetail.orderStatus] }}
 		</view>
 		<view class="status-tip">
-			感谢您的支持，喜欢您再来
+			{{ orderDetail.orderStatus === 1 ? '10分钟内未取餐，订单将自动取消' : '感谢您的支持，喜欢您再来' }}
 		</view>
 
 		<view class="card">
@@ -18,7 +18,7 @@
 				<view class="goods-name">
 					商品明细
 				</view>
-				<view class="goods-item" v-for="item in goods">
+				<view class="goods-item" v-for="(item, index) in goods" :key="index">
 					<view class="img">
 						<image style="width: 100%; height: 100%; background-color: #eee;border-radius: 4rpx;" mode="aspectFill"
 							:src="item.goodsImg"></image>
@@ -81,12 +81,18 @@
 				</view>
 			</view>
 		</view>
+
+		<view class="actions" v-if="orderStatus == 1 || orderDetail.orderStatus == 6">
+			<button class="button" @click="handleCancel" v-if="orderDetail.orderStatus === 1">取消订单</button>
+			<button class="button primary" @click="handlePay" v-if="orderDetail.orderStatus === 1">立即支付</button>
+		</view>
+		<MockPay ref="MockPayRef" @confirm="confirmPay"></MockPay>
 	</view>
 </template>
 
 <script setup>
-import { apiOrderDetail } from '@/api/order.js'
-import dayjs, { unix } from 'dayjs';
+import { apiOrderDetail, apiCancelOrder } from '@/api/order.js'
+import dayjs from 'dayjs';
 const orderId = ref()
 function formartSpData(spData) {
 	const dataObj = JSON.parse(spData)
@@ -135,6 +141,43 @@ function handleCopy(text) {
 	})
 }
 
+/**
+ * 取消订单
+ */
+async function handleCancel() {
+	uni.showModal({
+		title: '提示',
+		content: '确认取消订单吗？',
+		success: async (res) => {
+			if (res.confirm) {
+				try {
+					await apiCancelOrder(orderId.value)
+					uni.showToast({
+						title: '取消成功',
+						icon: 'none'
+					})
+					uni.navigateBack()
+				} catch (error) {
+					console.log('error :>> ', error);
+				}
+			}
+		}
+	})
+}
+const MockPayRef = ref()
+/**
+ * 支付
+ */
+function handlePay() {
+	nextTick(() => {
+		MockPayRef.value.open(orderDetail.value.id, orderDetail.value.payPrice)
+	})
+}
+
+function confirmPay() {
+	getDetail()
+}
+
 onLoad((options) => {
 	console.log('options :>> ', options);
 	orderId.value = options.id
@@ -146,7 +189,7 @@ const { dictVL: orderStatusDict } = useDict('orderStatus')
 
 <style scoped lang="scss">
 .container {
-	padding: 30rpx 20rpx 80rpx 20rpx;
+	padding: 30rpx 20rpx 260rpx 20rpx;
 
 	.code {
 		font-size: 60rpx;
@@ -167,6 +210,8 @@ const { dictVL: orderStatusDict } = useDict('orderStatus')
 
 	.order-tip {
 		font-size: 38rpx;
+		color: #000;
+		font-weight: 500;
 
 	}
 
@@ -273,6 +318,43 @@ const { dictVL: orderStatusDict } = useDict('orderStatus')
 				color: #a1a1aa;
 				padding: 2rpx 10rpx;
 			}
+		}
+
+
+	}
+
+	.actions {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 20rpx 20rpx 80rpx 20rpx;
+		height: 100rpx;
+		display: flex;
+		justify-content: flex-end;
+		background: #fff;
+
+		.button+.button {
+			margin-left: 30rpx;
+		}
+
+		.button {
+			border: 2rpx solid #a1a1aa;
+			background-color: #ffffff;
+			color: #71717a;
+			border-radius: 50rpx;
+			width: 180rpx;
+			padding: 0;
+			margin: 0;
+			font-size: 26rpx;
+			height: 80rpx;
+			line-height: 80rpx;
+		}
+
+		.primary {
+			background-color: #86B394;
+			color: #fff;
+			border: 0;
 		}
 	}
 }

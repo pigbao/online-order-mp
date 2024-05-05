@@ -83,7 +83,7 @@
 			</view>
 			<button class="button" @click="handleSubmit">立即支付</button>
 		</view>
-		<MockPay ref="MockPayRef"></MockPay>
+		<MockPay ref="MockPayRef" @cancel="cancelPay" @confirm="confirmPay"></MockPay>
 		<Remark ref="RemarkRef" v-model:value="remark"></Remark>
 	</view>
 </template>
@@ -110,6 +110,20 @@ async function handleSubmit() {
 		console.error(error);
 	}
 }
+
+function cancelPay(orderId) {
+	uni.redirectTo({
+		url: `/pages/orderDetail/orderDetail?id=${orderId}`,
+	})
+}
+
+function confirmPay(orderId) {
+	uni.redirectTo({
+		url: `/pages/orderDetail/orderDetail?id=${orderId}`,
+	})
+}
+
+
 const distance = ref(0)
 onLoad(async () => {
 	distance.value = await shopStore.getDistance()

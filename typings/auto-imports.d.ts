@@ -80,6 +80,7 @@ declare global {
   const useCssVars: typeof import('vue')['useCssVars']
   const useDict: typeof import('../composables/useDict.js')['useDict']
   const useIsTakeoutStore: typeof import('../stores/isTakeout.js')['useIsTakeoutStore']
+  const useSelectAddressStore: typeof import('../stores/selectAddress.js')['useSelectAddressStore']
   const useShopStore: typeof import('../stores/shop.js')['useShopStore']
   const useSlots: typeof import('vue')['useSlots']
   const useUserStore: typeof import('../stores/user.js')['useUserStore']

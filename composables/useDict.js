@@ -4,9 +4,9 @@
 
 export const dicts = {
   // 性别
-  sex: [
-    { label: '男', value: '1' },
-    { label: '女', value: '2' },
+  gender: [
+    { label: '先生', value: '1' },
+    { label: '女士', value: '2' },
   ],
   // 状态
   status: [

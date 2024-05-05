@@ -1,12 +1,16 @@
 <template>
 	<view class="container">
 		<view class="basic card">
-			<view class="shop-info">
+			<view class="info" @click="toShopDetail" v-if="isTakeoutStore.isTakeout == 1">
 				<view class="info-list">
-					<view class="shop-name">
+					<view class="info-title">
+						<view class="tag">
+							{{ isTakeoutStore.isTakeLabel }}
+						</view>
 						{{ shopStore.shopInfo.shopName }}
+						<uni-icons type="right" size="20" @click="toAddressList"></uni-icons>
 					</view>
-					<view class="address">
+					<view class="info-tip">
 						{{ shopStore.shopInfo.address }}
 					</view>
 				</view>
@@ -17,7 +21,21 @@
 					<uni-icons type="location-filled" size="30"></uni-icons>
 				</view>
 			</view>
-
+			<view class="info" @click="selectAddress" v-else>
+				<view class="info-list">
+					<view class="info-title">
+						<view class="tag">
+							{{ isTakeoutStore.isTakeLabel }}
+						</view>
+						{{ selectAddressStore.addressInfo?.address || '请选择收货地址' }}
+						<uni-icons type="right" size="20" @click="toAddressList"></uni-icons>
+					</view>
+					<view class="info-tip">
+						{{ selectAddressStore?.addressInfo?.name }} {{ selectAddressStore?.addressInfo?.gender }} {{
+				selectAddressStore?.addressInfo?.phone }}
+					</view>
+				</view>
+			</view>
 
 		</view>
 
@@ -93,6 +111,16 @@ import { apiCreateOrder } from '@/api/order'
 const shopStore = useShopStore()
 const cartStore = useCartStore()
 const isTakeoutStore = useIsTakeoutStore()
+
+// 收货信息
+const selectAddressStore = useSelectAddressStore()
+
+function selectAddress() {
+	uni.navigateTo({
+		url: '/pages/address/address?isSelect=true'
+	})
+}
+
 function formatSpData(spData) {
 	const dataObj = JSON.parse(spData)
 	const dataArr = dataObj.map(item => item.value)
@@ -136,6 +164,12 @@ function handleRemark() {
 		RemarkRef.value.open()
 	})
 }
+
+function toShopDetail() {
+	uni.navigateTo({
+		url: '/pages/shopDetail/shopDetail'
+	})
+}
 </script>
 
 <style scoped lang="scss">
@@ -148,22 +182,34 @@ function handleRemark() {
 		border-radius: 16rpx;
 		margin-bottom: 20rpx;
 
+		.tag {
+			color: #fff;
+			background: #494949;
+			display: inline-block;
+			font-size: 30rpx;
+			padding: 5rpx 8rpx;
+			margin-right: 10rpx;
+			border-radius: 10rpx;
+			font-weight: 500;
+		}
 
-
-		.shop-info {
+		.info {
 			display: flex;
 			margin-bottom: 20rpx;
 
 			.info-list {
 				flex: 1;
 
-				.shop-name {
+				.info-title {
 					font-size: 40rpx;
-					font-weight: 600;
+					font-weight: 500;
 					margin-bottom: 10rpx;
+					display: flex;
+					align-items: center;
+					color: #494949;
 				}
 
-				.address {
+				.info-tip {
 					font-size: 26rpx;
 					color: #9ca3af;
 				}

@@ -71,7 +71,16 @@
         "enablePullDownRefresh": false
       }
     }
-  ],
+      ,{
+            "path" : "pages/shopDetail/shopDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "店铺信息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",

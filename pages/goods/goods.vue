@@ -17,7 +17,7 @@
 				<uni-icons type="search" size="26"></uni-icons>
 			</view>
 		</view>
-		<view class="shop-info">
+		<view class="shop-info" @click="handleShopDetail">
 			<view class="shop-name">
 				{{ shopStore.shopInfo.shopName }}
 			</view>
@@ -130,6 +130,12 @@ function handleDetail(goods) {
 function handleSearch() {
 	uni.navigateTo({
 		url: "/pages/search/search"
+	})
+}
+
+function handleShopDetail() {
+	uni.navigateTo({
+		url: "/pages/shopDetail/shopDetail"
 	})
 }
 </script>

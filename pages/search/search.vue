@@ -1,17 +1,17 @@
 <template>
 	<view class="container">
 		<view class="search-bar">
-			<uni-search-bar @confirm="search"></uni-search-bar>
+			<uni-search-bar @blur="search" v-model="searchValue"></uni-search-bar>
 		</view>
 		<view class="goods">
 			<view class="item" v-for="item in goods" @click="handleSelect(item)">
-				<image style="width: 100rpx; height: 100rpx; background-color: #eee;border-radius: 4rpx;"
-					mode="aspectFill" :src="item.img"></image>
+				<image style="width: 100rpx; height: 100rpx; background-color: #eee;border-radius: 4rpx;" mode="aspectFill"
+					:src="item.img"></image>
 				<view class="name">
-					{{item.goodsName}}
+					{{ item.goodsName }}
 				</view>
 				<view class="money">
-					￥{{item.minMoney}}起
+					￥{{ item.minPrice / 100 }}起
 				</view>
 			</view>
 		</view>
@@ -19,67 +19,52 @@
 </template>
 
 <script setup>
-	function search() {
-
+import { apiSearchGoods } from '@/api/goods'
+const goods = ref([])
+async function search(e) {
+	try {
+		if (!e?.value) {
+			return
+		}
+		const res = await apiSearchGoods(e.value)
+		goods.value = res
+	} catch (error) {
+		console.error(error);
 	}
+}
 
-	const goods = ref([{
-		goodsId: 1,
-		goodsName: '奶茶1',
-		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		minMoney: '19'
-	}, {
-		goodsId: 1,
-		goodsName: '珍珠奶茶',
-		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		minMoney: '19'
-	}, {
-		goodsId: 1,
-		goodsName: '奶茶2',
-		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		minMoney: '19'
-	}, {
-		goodsId: 1,
-		goodsName: '奶茶5',
-		intro: '巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉',
-		img: 'http://192.168.0.104:7001/public/uploads/2024/04/13/171299934064127.png',
-		minMoney: '19'
-	}, ])
 
-	function handleSelect(goods) {
-		uni.navigateTo({
-			url: "/pages/goodsDetail/goodsDetail"
-		})
-	}
+function handleSelect(goods) {
+	uni.navigateTo({
+		url: "/pages/goodsDetail/goodsDetail"
+	})
+}
 </script>
 
 <style scoped lang="scss">
-	.container {
-		.search-bar {
+.container {
+	.search-bar {
+		background-color: #fff;
+	}
+
+	.goods {
+
+		.item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 			background-color: #fff;
-		}
+			padding: 20rpx;
 
-		.goods {
+			.name {
+				flex: 1;
+				padding: 0 20rpx;
+			}
 
-			.item {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				background-color: #fff;
-				padding: 20rpx;
-
-				.name {
-					flex: 1;
-					padding: 0 20rpx;
-				}
-
-				.money {
-					font-weight: 600;
-				}
+			.money {
+				font-weight: 600;
 			}
 		}
 	}
+}
 </style>

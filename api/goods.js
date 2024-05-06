@@ -19,3 +19,13 @@ export function apiGoodsDetail(id) {
 		}
 	})
 }
+
+export function apiSearchGoods(value) {
+	return request({
+		url: '/wx/goods/search',
+		method: 'get',
+		data: {
+			value
+		}
+	})
+}

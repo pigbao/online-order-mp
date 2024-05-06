@@ -1,13 +1,13 @@
 <template>
-	<view class="container" :style="`background-image: url(${url});`">
-		<view class="header">
+	<view class="container">
+		<view class="header" :style="`background-image: url(${url});`">
 
 			<view class="user-info">
-				<view class="avatar">
-					<image class="image" mode="aspectFit" :src="goods?.img"></image>
-				</view>
-				<view class="name">
-					了子同学
+				<button class="avatar" open-type="chooseAvatar" @chooseavatar="changeAvatar">
+					<image class="image" mode="aspectFit" :src="userStore.userInfo?.avatar"></image>
+				</button>
+				<view class="name" @click="openNickName">
+					{{ userStore.userInfo?.nickName || '用户' }}
 				</view>
 				<view class="tip">
 					感谢您的支持
@@ -33,11 +33,41 @@
 				</view>
 			</view>
 		</view>
+		<NickName ref="nickNameRef" @change="changeNickName"></NickName>
 	</view>
 </template>
 
 <script setup>
-const url = ref('http://192.168.0.104:7001/public/uploads/2024/04/13/8.webp')
+import { apiAvatar, apiNickName } from '@/api/user'
+import { baseUrl } from '@/utils/env'
+const url = ref(baseUrl + '/public/icon/user/bg.png')
+
+const userStore = useUserStore()
+
+async function changeAvatar(e) {
+	try {
+		await apiAvatar(e?.detail?.avatarUrl)
+		userStore.userInfo.avatar = e?.detail?.avatarUrl
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+const nickNameRef = ref()
+function openNickName() {
+	nickNameRef.value.open()
+}
+
+async function changeNickName(e) {
+	try {
+		console.log('e :>> ', e);
+		await apiNickName(e)
+		userStore.userInfo.nickName = e
+	} catch (error) {
+		console.error(error);
+	}
+
+}
 
 function address() {
 	uni.navigateTo({
@@ -55,11 +85,13 @@ function call() {
 <style scoped lang="scss">
 .container {
 	min-height: 500rpx;
-	background-repeat: no-repeat;
-	background-size: 100% 600rpx;
+
+
 
 	.header {
 		padding: 500rpx 20rpx 0 20rpx;
+		background-repeat: no-repeat;
+		background-size: cover;
 
 		.user-info {
 			background-color: #fff;

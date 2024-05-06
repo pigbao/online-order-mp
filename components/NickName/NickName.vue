@@ -8,7 +8,7 @@
           </view>
         </view>
         <view class="info">
-          <input type="nickname" :value="val" @change="onInput" placeholder="请输入"></input>
+          <input type="nickname" :value="val" @change="onInput" placeholder="请输入" />
         </view>
         <view class="btn">
           <button class="button" @click="handleSubmit">确认</button>
@@ -31,7 +31,6 @@ const emits = defineEmits(['update:value', 'change'])
 const val = ref('')
 
 function onInput(e) {
-  console.log('e.detail.value :>> ', e.detail.value);
   val.value = e.detail.value
 }
 

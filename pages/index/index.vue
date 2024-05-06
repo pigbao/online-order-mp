@@ -10,7 +10,7 @@
 			<view class="card">
 				<view class="card-head">
 					<view class="user-info">
-						Yo~ 了子同学
+						Yo~ {{ userStore?.userInfo?.nickName }}
 					</view>
 				</view>
 				<view class="card-body">
@@ -43,6 +43,7 @@
 <script setup>
 import { apiBannerList } from '@/api/index.js'
 
+const userStore = useUserStore()
 
 const bannerList = ref([])
 
@@ -59,9 +60,10 @@ getBannerList()
 
 
 function handleSwiper(item) {
+	console.log('item :>> ', item);
 	if (item?.goodsId) {
 		uni.navigateTo({
-			url: `/pages/goodsDetail/goodsDetail?goodsId=${item.goodsId}`
+			url: `/pages/goodsDetail/goodsDetail?id=${item.goodsId}`
 		})
 	}
 }

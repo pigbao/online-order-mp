@@ -20,13 +20,14 @@
 
 <script setup>
 import { apiSearchGoods } from '@/api/goods'
+const isTakeoutStore = useIsTakeoutStore()
 const goods = ref([])
 async function search(e) {
 	try {
 		if (!e?.value) {
 			return
 		}
-		const res = await apiSearchGoods(e.value)
+		const res = await apiSearchGoods(e.value, isTakeoutStore.isTakeout)
 		goods.value = res
 	} catch (error) {
 		console.error(error);
@@ -36,7 +37,7 @@ async function search(e) {
 
 function handleSelect(goods) {
 	uni.navigateTo({
-		url: "/pages/goodsDetail/goodsDetail"
+		url: `/pages/goodsDetail/goodsDetail?id=${goods.id}`
 	})
 }
 </script>

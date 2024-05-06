@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="code" v-if="[2, 3].includes(orderDetail.orderStatus)">
+		<view class="code" v-if="[2, 3].includes(orderDetail.orderStatus) && orderDetail?.isTakeout == 1">
 			{{ code }}
 			<view class="tip">
 				取餐码
@@ -93,6 +93,7 @@
 <script setup>
 import { apiOrderDetail, apiCancelOrder } from '@/api/order.js'
 import dayjs from 'dayjs';
+
 const orderId = ref()
 function formartSpData(spData) {
 	const dataObj = JSON.parse(spData)

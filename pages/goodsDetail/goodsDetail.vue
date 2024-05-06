@@ -115,9 +115,7 @@ async function addCart() {
 			return
 		}
 		await cartStore.addCart({ specId: selectSpecs.value.id, count: count.value, goodsId: goods.value.id })
-		uni.navigateBack(
-			{ delta: 1 }
-		)
+		uni.switchTab({ url: '/pages/goods/goods' })
 	} catch (e) {
 		console.error(e);
 	}

@@ -66,6 +66,7 @@ function changeGender(e) {
 
 async function handleAdd() {
 	try {
+		console.log('form.value :>> ', form.value);
 		if (checkEmpty(form.value.name)) {
 			uni.showToast({
 				title: '联系人不能为空',
@@ -124,7 +125,9 @@ async function getDetail(id) {
 }
 
 onLoad((options) => {
-	getDetail(options.id)
+	if (options?.id) {
+		getDetail(options.id)
+	}
 })
 
 const { dictArray: genderDict } = useDict('gender')

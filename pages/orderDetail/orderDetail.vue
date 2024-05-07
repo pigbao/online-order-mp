@@ -82,7 +82,7 @@
 			</view>
 		</view>
 
-		<view class="actions" v-if="orderStatus == 1 || orderDetail.orderStatus == 6">
+		<view class="actions" v-if="orderDetail.orderStatus == 1 || orderDetail.orderStatus == 6">
 			<button class="button" @click="handleCancel" v-if="orderDetail.orderStatus === 1">取消订单</button>
 			<button class="button primary" @click="handlePay" v-if="orderDetail.orderStatus === 1">立即支付</button>
 		</view>

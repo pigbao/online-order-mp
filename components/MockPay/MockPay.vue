@@ -10,7 +10,7 @@
 				<view class="info">
 					<!-- <image src="../../static/pay/pay.png" style="width: 150rpx; height: 150rpx;"></image> -->
 					<view class="name">
-						羊驼奶茶店
+						{{ shopStore?.shopInfo?.shopName }}
 					</view>
 					<view class="money">
 						￥{{ money / 100 }}
@@ -27,6 +27,7 @@
 <script setup>
 import { apiPay } from '@/api/order.js'
 const emits = defineEmits(['cancel', 'confirm'])
+const shopStore = useShopStore()
 
 const orderId = ref()
 const money = ref(64)

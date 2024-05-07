@@ -10,7 +10,7 @@
 			{{ orderStatusDict[orderDetail.orderStatus] }}
 		</view>
 		<view class="status-tip">
-			{{ orderDetail.orderStatus === 1 ? '10分钟内未取餐，订单将自动取消' : '感谢您的支持，喜欢您再来' }}
+			{{ orderDetail.orderStatus === 1 ? '10分钟内未支付，订单将自动取消' : '感谢您的支持，喜欢您再来' }}
 		</view>
 
 		<view class="card">

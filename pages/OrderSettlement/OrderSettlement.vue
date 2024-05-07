@@ -31,8 +31,8 @@
 						<uni-icons type="right" size="20" @click="toAddressList"></uni-icons>
 					</view>
 					<view class="info-tip">
-						{{ selectAddressStore?.addressInfo?.name }} {{ selectAddressStore?.addressInfo?.gender }} {{
-				selectAddressStore?.addressInfo?.phone }}
+						{{ selectAddressStore?.addressInfo?.name }} {{ genderDict[selectAddressStore?.addressInfo?.gender] }} {{
+							selectAddressStore?.addressInfo?.phone }}
 					</view>
 				</view>
 			</view>
@@ -114,7 +114,6 @@ const isTakeoutStore = useIsTakeoutStore()
 
 // 收货信息
 const selectAddressStore = useSelectAddressStore()
-
 function selectAddress() {
 	uni.navigateTo({
 		url: '/pages/address/address?isSelect=true'
@@ -131,7 +130,22 @@ const MockPayRef = ref()
 
 async function handleSubmit() {
 	try {
-		const { id, payPrice } = await apiCreateOrder({ cartList: cartStore.cartList, remark: remark.value, isTakeout: isTakeoutStore.isTakeout })
+		const params = { cartList: cartStore.cartList, remark: remark.value, isTakeout: isTakeoutStore.isTakeout }
+		if (isTakeoutStore?.isTakeout == 2) {
+			if (!selectAddressStore.addressInfo) {
+				uni.showToast({
+					title: '请选择收货地址',
+					icon: 'none'
+				})
+				return
+			} else {
+				params.address = selectAddressStore.addressInfo.address
+				params.customerName = selectAddressStore.addressInfo.name
+				params.customerPhone = selectAddressStore.addressInfo.phone
+				params.gender = selectAddressStore.addressInfo.gender
+			}
+		}
+		const { id, payPrice } = await apiCreateOrder(params)
 		cartStore.getList()
 		MockPayRef.value.open(id, payPrice)
 	} catch (error) {
@@ -170,6 +184,8 @@ function toShopDetail() {
 		url: '/pages/shopDetail/shopDetail'
 	})
 }
+
+const { dictVL: genderDict } = useDict('gender')
 </script>
 
 <style scoped lang="scss">

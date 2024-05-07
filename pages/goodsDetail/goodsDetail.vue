@@ -31,6 +31,9 @@
 			<view class="head">
 				<view class="money">
 					￥{{ ((selectSpecs?.price || 0) / 100) * count }}
+					<view class="original">
+						￥{{ ((selectSpecs?.originalPrice || 0) / 100) * count }}
+					</view>
 				</view>
 				<view class="count">
 					<Count v-model:value="count" :maxCount="selectSpecs?.stock || 1"></Count>
@@ -210,6 +213,15 @@ onLoad((options) => {
 			.money {
 				font-size: 36rpx;
 				font-weight: 700;
+				display: flex;
+				align-items: flex-end;
+
+				.original {
+					text-decoration: line-through;
+					font-size: 26rpx;
+					margin-left: 10rpx;
+					color: #b0b0b0;
+				}
 			}
 		}
 
